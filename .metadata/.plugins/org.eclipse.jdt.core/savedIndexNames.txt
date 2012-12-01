@@ -1,1 +1,0 @@
-INDEX VERSION 1.126+C:\Dropbox\Year 5\COSC 3V97\Project\HiFive\.metadata\.plugins\org.eclipse.jdt.core
