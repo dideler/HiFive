@@ -44,7 +44,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,14 +63,22 @@ public class Beam extends Activity implements
         mInfoText = (TextView) findViewById(R.id.textView);
         // Check for available NFC Adapter
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        if (mNfcAdapter == null) {
+        if (mNfcAdapter == null)
+        {
             mInfoText = (TextView) findViewById(R.id.textView);
             mInfoText.setText("NFC is not available on this device.");
         }
-        // Register callback to set NDEF message
-        mNfcAdapter.setNdefPushMessageCallback(this, this);
-        // Register callback to listen for message-sent success
-        mNfcAdapter.setOnNdefPushCompleteCallback(this, this);
+        else if (!mNfcAdapter.isEnabled())
+        {
+            Toast.makeText(this, R.string.toast_disabled, Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            // Register callback to set NDEF message
+            mNfcAdapter.setNdefPushMessageCallback(this, this);
+            // Register callback to listen for message-sent success
+            mNfcAdapter.setOnNdefPushCompleteCallback(this, this);
+        }
     }
 
 
@@ -180,7 +187,7 @@ public class Beam extends Activity implements
                 startActivity(intent);
                 return true;
             case R.id.menu_help: // TODO: verify this works
-            	Toast.makeText(getApplicationContext(), R.string.info, Toast.LENGTH_LONG).show();
+            	Toast.makeText(getApplicationContext(), R.string.toast_info, Toast.LENGTH_LONG).show();
             	return true;
             default:
                 return super.onOptionsItemSelected(item);
