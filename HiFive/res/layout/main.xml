@@ -6,21 +6,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <!-- Default weight for views is 0, anything larger and the view fills whatever
-    	 space remains after all views are given their required space.
-    	 
-    	 We also set the width to 0 (a static value) because it's more efficient.
-    	 The width that wrap_content calculates will be ignored anyway, so don't calculate it. -->
-    
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dip"
         android:layout_marginRight="10dip"
         android:text="@string/button_contact_info"
-        android:onClick="sendMessage" />
-    <!-- wrap_content means button is only as big as needs to be (e.g. size of the button's text).
-    
-    	 sendMessage method is called when the button is pressed. -->
-    
+        android:onClick="changeContactInfo" />
+     
 </LinearLayout>
