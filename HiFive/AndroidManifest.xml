@@ -37,6 +37,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="application/com.hifive.beam" />
             </intent-filter>
+            <!-- TODO: Verify we are using the correct MIME type.
+                       Maybe it should be "text/plain" or other for a contact? -->
         </activity>
     </application>
 </manifest>
