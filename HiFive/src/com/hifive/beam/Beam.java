@@ -195,9 +195,6 @@ public class Beam extends Activity implements
     	// The second argument refers to the class of the component that the intent will be delivered to.
     	// You can also have _implicit_ intents, where the desired component is not specified (for interacting with other apps).
     	Intent intent = new Intent(this, ContactInfo.class);
-    	EditText editText = (EditText) findViewById(R.id.edit_message);
-    	String message = editText.getText().toString();
-    	intent.putExtra(EXTRA_MESSAGE, message); // bundle the data as a key-value pair
     	startActivity(intent);
     }
 }
