@@ -16,5 +16,5 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_width="fill_parent"
-        android:text="@string/search_contacts"></Button>
+        android:text="@string/button_search_contacts"></Button>
 </LinearLayout>

@@ -16,7 +16,7 @@ import android.widget.TextView;
  * A simple example app to let you enter a number and start the contacts app
  * showing the contact with that number.
  */
-public class Main extends Activity {
+public class ContactInfo extends Activity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
