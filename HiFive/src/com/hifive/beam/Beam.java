@@ -24,6 +24,8 @@
 
 package com.hifive.beam;
 
+import java.nio.charset.Charset;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.nfc.NdefMessage;
@@ -41,10 +43,10 @@ import android.text.format.Time;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.nio.charset.Charset;
 
 
 public class Beam extends Activity implements
@@ -177,11 +179,25 @@ public class Beam extends Activity implements
                 Intent intent = new Intent(Settings.ACTION_NFCSHARING_SETTINGS);
                 startActivity(intent);
                 return true;
-            case R.id.menu_help:
+            case R.id.menu_help: // TODO: verify this works
             	Toast.makeText(getApplicationContext(), R.string.info, Toast.LENGTH_LONG).show();
             	return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+    
+    /** Called when the user clicks the Send button (via android:onClick in xml.)
+     */
+    public void changeContactInfo(View view) {
+    	// Intent objects are used to provide runtime binding between separate components (e.g. starting another activity).
+    	// Intents can also carry a bundle of data to the given activity. 
+    	// The second argument refers to the class of the component that the intent will be delivered to.
+    	// You can also have _implicit_ intents, where the desired component is not specified (for interacting with other apps).
+    	Intent intent = new Intent(this, ContactInfo.class);
+    	EditText editText = (EditText) findViewById(R.id.edit_message);
+    	String message = editText.getText().toString();
+    	intent.putExtra(EXTRA_MESSAGE, message); // bundle the data as a key-value pair
+    	startActivity(intent);
     }
 }
