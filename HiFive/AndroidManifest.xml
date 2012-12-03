@@ -24,8 +24,10 @@
     <uses-permission android:name="android.permission.NFC" />
     <uses-sdk android:minSdkVersion="14" />
     <uses-feature android:name="android.hardware.nfc" />
-    <application android:icon="@drawable/ic_launcher" android:label="@string/app_name">
-        <activity android:name="com.hifive.beam.Beam"
+    <!-- icon is used for the launcher icon, logo is used as the ActionBar icon (logo icon fits the theme of other ActionBar icons) -->
+    <application android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:logo="@drawable/highfive">
+        <activity
+                android:name=".Beam"
                 android:label="@string/app_name"
                 android:launchMode="singleTop">
             <intent-filter>
@@ -39,6 +41,13 @@
             </intent-filter>
             <!-- TODO: Verify we are using the correct MIME type.
                        Maybe it should be "text/plain" or other for a contact? -->
+        </activity>
+        <activity
+            android:name=".ContactInfo"
+            android:label="@string/app_name" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.hifive.beam.Beam" />
         </activity>
     </application>
 </manifest>
