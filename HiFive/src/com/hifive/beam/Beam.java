@@ -226,7 +226,7 @@ public class Beam extends Activity implements
     
     /** Called when the user clicks the Send button (via android:onClick in xml.)
      */
-    public void changeContactInfo(View view) { // FIXME - crashes
+    public void changeContactInfo(View view) {
     	// Intent objects are used to provide runtime binding between separate components (e.g. starting another activity).
     	// Intents can also carry a bundle of data to the given activity. 
     	// The second argument refers to the class of the component that the intent will be delivered to.

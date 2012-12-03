@@ -22,8 +22,8 @@ public class ContactInfo extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Initialize activity
-        setContentView(R.layout.main);
-
+        setContentView(R.layout.contact_info);
+/*
         // Add formatting to number field
         final TextView number = (TextView) findViewById(R.id.number);
         number.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
@@ -36,5 +36,6 @@ public class ContactInfo extends Activity {
                 startActivity(new Intent(ContactsContract.Intents.SHOW_OR_CREATE_CONTACT, uri));
             }
         });
+        */
     }
 }
