@@ -27,6 +27,7 @@ package com.hifive.beam;
 import java.nio.charset.Charset;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
@@ -35,11 +36,14 @@ import android.nfc.NfcAdapter.CreateNdefMessageCallback;
 import android.nfc.NfcAdapter.OnNdefPushCompleteCallback;
 import android.nfc.NfcEvent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.text.format.Time;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -68,11 +72,13 @@ public class Beam extends Activity implements
             mInfoText = (TextView) findViewById(R.id.textView);
             mInfoText.setText("NFC is not available on this device.");
         }
-        else if (!mNfcAdapter.isEnabled())
+        else if (!mNfcAdapter.isEnabled()) // TODO: make it a notification
         {
-            Toast.makeText(this, R.string.toast_disabled, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.disabled, Toast.LENGTH_LONG).show();
         }
-        else
+        // NfcAdapter.isNdefPushEnabled()
+        // ^Checks if Android Beam is enabled, available in Android 4.1 (API 16) and up.
+        else  // Good to go!
         {
             // Register callback to set NDEF message
             mNfcAdapter.setNdefPushMessageCallback(this, this);
@@ -112,6 +118,10 @@ public class Beam extends Activity implements
      */
     @Override
     public void onNdefPushComplete(NfcEvent arg0) {
+    	toast(R.string.beamed);
+		Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE) ;
+		vibe.vibrate(500);
+    	// TODO: Is handler (and NfcEvent param) necessary for us? 
         // A handler is needed to send messages to the activity when this
         // callback occurs, because it happens from a binder thread
         mHandler.obtainMessage(MESSAGE_SENT).sendToTarget();
@@ -187,7 +197,23 @@ public class Beam extends Activity implements
                 startActivity(intent);
                 return true;
             case R.id.menu_help: // TODO: verify this works
-            	Toast.makeText(getApplicationContext(), R.string.toast_info, Toast.LENGTH_LONG).show();
+            	//Toast.makeText(getApplicationContext(), R.string.info, Toast.LENGTH_LONG).show();
+            	
+            	// Workaround to extend toast popup time.
+            	/*
+            	final Toast tag = Toast.makeText(getBaseContext(), R.string.info, Toast.LENGTH_SHORT);
+            	tag.show();
+            	new CountDownTimer(9000, 1000)
+            	{
+            	    public void onTick(long millisUntilFinished) {tag.show();}
+            	    public void onFinish() {tag.show();}
+            	}.start();
+            	*/
+            	
+            	if (!mNfcAdapter.isEnabled())
+            	    toast(R.string.disabled);
+            	
+                startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
             	return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -204,4 +230,22 @@ public class Beam extends Activity implements
     	Intent intent = new Intent(this, ContactInfo.class);
     	startActivity(intent);
     }
+    
+    /**
+     * Calls our toast method with a string. Allows for us to do `toast(R.string.foo)`.
+     * @param id
+     */
+    public void toast(int id) {
+		toast(getString(id));
+	}
+    
+    /**
+     * Toast simplification.
+     * @param message
+     */
+    public void toast(String message) {
+		Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0);
+		toast.show();
+	}
 }
