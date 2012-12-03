@@ -75,6 +75,7 @@ public class Beam extends Activity implements
         else if (!mNfcAdapter.isEnabled()) // TODO: make it a notification
         {
             Toast.makeText(this, R.string.nfc_disabled, Toast.LENGTH_LONG).show();
+    	    //toast(R.string.nfc_disabled);
         }
         // else if (!mNfcAdapter.isNdefPushEnabled()) // Available in API 16 and up.
         //{
@@ -201,23 +202,21 @@ public class Beam extends Activity implements
             case R.id.menu_nfc_settings: // Wireless (which includes NFC) setting
             	startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
             	return true;
-            case R.id.menu_help: // TODO: verify this works
-            	//Toast.makeText(getApplicationContext(), R.string.info, Toast.LENGTH_LONG).show();
+            case R.id.menu_help:
+            	// First check if user has NFC disabled and notify them if so.
+            	if (!mNfcAdapter.isEnabled())
+            	    toast(R.string.nfc_disabled);
             	
             	// Workaround to extend toast popup time to approximately 10 seconds.
-            	/*
+            	// http://stackoverflow.com/a/7173248/72321
             	final Toast tag = Toast.makeText(getBaseContext(), R.string.info, Toast.LENGTH_SHORT);
+            	tag.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0);
             	tag.show();
-            	new CountDownTimer(9000, 1000)
+            	new CountDownTimer(15000, 1000)
             	{
             	    public void onTick(long millisUntilFinished) {tag.show();}
             	    public void onFinish() {tag.show();}
             	}.start();
-            	*/
-            	
-            	if (!mNfcAdapter.isEnabled())
-            	    toast(R.string.nfc_disabled);
-            	
                 
             	return true;
             default:
@@ -227,7 +226,7 @@ public class Beam extends Activity implements
     
     /** Called when the user clicks the Send button (via android:onClick in xml.)
      */
-    public void changeContactInfo(View view) {
+    public void changeContactInfo(View view) { // FIXME - crashes
     	// Intent objects are used to provide runtime binding between separate components (e.g. starting another activity).
     	// Intents can also carry a bundle of data to the given activity. 
     	// The second argument refers to the class of the component that the intent will be delivered to.

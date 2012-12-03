@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">HiFive</string>
-    <string name="info">Ensure that NFC and Android Beam are enabled by turning them on
-        in the system Settings (use the setting icon above).\n
+    <string name="info">Are NFC and Android Beam enabled?\n
+        Turn them on in the system settings\n
+        (use the settings icons above).\n
         Then place this device against another Android device that supports Android Beam
         to send your contact info.</string>
     <string name="nfc_disabled">Uh oh, NFC is disabled!\n
