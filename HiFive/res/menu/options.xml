@@ -5,7 +5,7 @@
           android:showAsAction="ifRoom"
           android:title="@string/menu_nfc_settings" />
     <item android:id="@+id/menu_beam_settings"
-          android:icon="@drawable/ic_menu_preferences"
+          android:icon="@drawable/nfc_phone"
           android:showAsAction="ifRoom"
           android:title="@string/menu_beam_settings" />
     <item android:id="@+id/menu_help"
