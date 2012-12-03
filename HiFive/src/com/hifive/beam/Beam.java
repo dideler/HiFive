@@ -74,10 +74,12 @@ public class Beam extends Activity implements
         }
         else if (!mNfcAdapter.isEnabled()) // TODO: make it a notification
         {
-            Toast.makeText(this, R.string.disabled, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.nfc_disabled, Toast.LENGTH_LONG).show();
         }
-        // NfcAdapter.isNdefPushEnabled()
-        // ^Checks if Android Beam is enabled, available in Android 4.1 (API 16) and up.
+        // else if (!mNfcAdapter.isNdefPushEnabled()) // Available in API 16 and up.
+        //{
+        //	toast(R.string.beam_disabled);
+        //}
         else  // Good to go!
         {
             // Register callback to set NDEF message
@@ -146,6 +148,7 @@ public class Beam extends Activity implements
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
             processIntent(getIntent());
         }
+        // TODO: check if NFC & Android Beam are still enabled
     }
 
     @Override
@@ -192,14 +195,16 @@ public class Beam extends Activity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_settings:
-                Intent intent = new Intent(Settings.ACTION_NFCSHARING_SETTINGS);
-                startActivity(intent);
+            case R.id.menu_beam_settings: // Android Beam setting
+                startActivity(new Intent(Settings.ACTION_NFCSHARING_SETTINGS));
                 return true;
+            case R.id.menu_nfc_settings: // Wireless (which includes NFC) setting
+            	startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+            	return true;
             case R.id.menu_help: // TODO: verify this works
             	//Toast.makeText(getApplicationContext(), R.string.info, Toast.LENGTH_LONG).show();
             	
-            	// Workaround to extend toast popup time.
+            	// Workaround to extend toast popup time to approximately 10 seconds.
             	/*
             	final Toast tag = Toast.makeText(getBaseContext(), R.string.info, Toast.LENGTH_SHORT);
             	tag.show();
@@ -211,9 +216,9 @@ public class Beam extends Activity implements
             	*/
             	
             	if (!mNfcAdapter.isEnabled())
-            	    toast(R.string.disabled);
+            	    toast(R.string.nfc_disabled);
             	
-                startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+                
             	return true;
             default:
                 return super.onOptionsItemSelected(item);

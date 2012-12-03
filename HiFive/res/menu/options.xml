@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_nfc_settings"
+          android:icon="@drawable/nfc_card"
+          android:showAsAction="ifRoom"
+          android:title="@string/menu_nfc_settings" />
     <item android:id="@+id/menu_beam_settings"
           android:icon="@drawable/ic_menu_preferences"
           android:showAsAction="ifRoom"
-          android:title="@string/menu_settings" />
+          android:title="@string/menu_beam_settings" />
     <item android:id="@+id/menu_help"
-        android:title="@string/menu_help" />
+          android:icon="@drawable/help"
+          android:showAsAction="ifRoom"
+          android:title="@string/menu_help" />
 </menu>
