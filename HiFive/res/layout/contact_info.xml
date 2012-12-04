@@ -13,6 +13,7 @@
         android:id="@+id/number"
         android:layout_width="fill_parent"
         android:inputType="phone"
+        android:hint="@string/hint_contactinfo"
     />
     
     <Button
