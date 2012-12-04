@@ -13,8 +13,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 /**
- * A simple example app to let you enter a number and start the contacts app
- * showing the contact with that number.
+ * This activity lets the user enter their phone number (it's unique so works for us)
+ * and then starts the contacts app showing the contact with that number if it exists,
+ * otherwise they have the option to create a new contact.
  */
 public class ContactInfo extends Activity {
     /** Called when the activity is first created. */
