@@ -22,6 +22,7 @@
         android:versionCode="1"
         android:versionName="1.0">
     <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-sdk android:minSdkVersion="14" />
     <uses-feature android:name="android.hardware.nfc" />
     <!-- icon is used for the launcher icon, logo is used as the ActionBar icon (logo icon fits the theme of other ActionBar icons) -->
