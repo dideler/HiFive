@@ -80,9 +80,10 @@ public class Beam extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        mInfoText = (TextView) findViewById(R.id.textView);
-        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
     	settings = getSharedPreferences(PREFERENCE_FILENAME, MODE_PRIVATE);
+        mInfoText = (TextView) findViewById(R.id.textView);
+        
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mNfcAdapter == null)  // Check for available NFC Adapter.
         {
             mInfoText.setText("NFC is not available on this device.");
@@ -90,7 +91,9 @@ public class Beam extends Activity implements
         else  // Good to go!
         {
         	// Check if NFC is enabled.
-        	if (!mNfcAdapter.isEnabled()) // TODO: make it a notification (https://github.com/TeamHi5/HiFive/issues/9)
+        	// TODO: make it a notification (https://github.com/TeamHi5/HiFive/issues/9)
+        	// TODO: put in its own function
+        	if (!mNfcAdapter.isEnabled())
             {
         	    toast(R.string.nfc_disabled);
             }
@@ -107,7 +110,7 @@ public class Beam extends Activity implements
         	// Delete all preferences -- for testing only!
         	//getSharedPreferences(PREFERENCE_FILENAME, 0).edit().clear().commit();
             
-        	// Load lookupKey from saved preferences.v
+        	// Load lookupKey from saved preferences.
         	String lookupKey = settings.getString(LOOKUP_ID, "No ID found!");
         	Log.i(TAG, lookupKey);
         	
@@ -121,12 +124,7 @@ public class Beam extends Activity implements
         	{
         		loadVcard(lookupKey); // TODO: test it's working
         	}
-        	
-        	// TODO: we'll probably move this to onresume
-//            // Register callback to set NDEF message
-//            mNfcAdapter.setNdefPushMessageCallback(this, this);
-//            // Register callback to listen for message-sent success
-//            mNfcAdapter.setOnNdefPushCompleteCallback(this, this);
+        	// NOTE: NDEF callbacks moved to onResume.
         }
     }
 
@@ -135,12 +133,9 @@ public class Beam extends Activity implements
      * Implementation for the CreateNdefMessageCallback interface
      */
     @Override
-    public NdefMessage createNdefMessage(NfcEvent event) {
-        Time time = new Time();
-        time.setToNow();
-//        String text = ("Beam me up!\n\n" +
-//                "Beam Time: " + time.format("%H:%M:%S"));
-        NdefMessage msg = new NdefMessage(new NdefRecord[] {getContactRecord()});
+    public NdefMessage createNdefMessage(NfcEvent event)
+    {
+    	NdefMessage msg = new NdefMessage(new NdefRecord[] { getContactRecord() });
 //        NdefMessage msg = new NdefMessage(
 //                new NdefRecord[] { createMimeRecord(
 //                        "application/com.example.android.beam", text.getBytes())
@@ -155,8 +150,8 @@ public class Beam extends Activity implements
 //          //,NdefRecord.createApplicationRecord("com.example.android.beam")
 //                    
 //        });
-     // send the contact as a vCard NDEFMessage
-        
+     
+    	// NDEFMessage contains the contact as vCard-formatted data.
         return msg;
     }
     
@@ -165,10 +160,15 @@ public class Beam extends Activity implements
      * the Beam.VCARD static variable.
      * @return NdefRecord containing the contact info to beam
      */
-    private NdefRecord getContactRecord(){
-    	if (Beam.VCARD.length() <= 0) return null;
-    	else{
-    		byte[] uriField = Beam.VCARD.getBytes(Charset.forName("US-ASCII"));
+    private NdefRecord getContactRecord()
+    {
+    	if (VCARD.isEmpty())
+    	{
+    		return null; // TODO: test what happens on beam attempt
+    	}
+    	else
+    	{
+    		byte[] uriField = VCARD.getBytes(Charset.forName("US-ASCII"));
             byte[] payload = new byte[uriField.length + 1];              //add 1 for the URI Prefix
             System.arraycopy(uriField, 0, payload, 1, uriField.length);  //appends URI to payload
             NdefRecord nfcRecord = new NdefRecord(
@@ -212,13 +212,14 @@ public class Beam extends Activity implements
         }
         // TODO: check if NFC & Android Beam are still enabled
     	
-        if (settings != null && !settings.contains(LOOKUP_ID))
+        if (settings != null && !settings.contains(LOOKUP_ID)) // TODO: might be better to check if vcard is empty
         {
         	toast(R.string.forgot_set_contact); // temporary
         	//toast(R.string.choose_contact);
     		//changeContactInfo();
         }
-        else if (mNfcAdapter != null){
+        else if (mNfcAdapter != null)
+        {
         	// set callbacks, create message, etc.
         	// Register callback to set NDEF message
             mNfcAdapter.setNdefPushMessageCallback(this, this);
