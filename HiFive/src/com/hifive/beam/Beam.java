@@ -44,6 +44,7 @@ import android.os.Parcelable;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -58,10 +59,12 @@ public class Beam extends Activity implements
 {
     NfcAdapter mNfcAdapter;
     TextView mInfoText;
+	private static final String TAG = "Beam";
     private static final int MESSAGE_SENT = 1;
     public static final int PREF_REQUEST_CODE = 13;
     public static final String PREFERENCE_FILENAME = "ContactsPrefs";
     public static final String LOOKUP_ID = "ContactID";
+    
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,7 +74,16 @@ public class Beam extends Activity implements
         // Load lookupKey from saved preferences.
         SharedPreferences settings = getSharedPreferences(PREFERENCE_FILENAME, MODE_PRIVATE);
     	String lookupKey = settings.getString(LOOKUP_ID, "No ID found!");
-    	toast(lookupKey);
+    	Log.i(TAG, lookupKey);
+    	
+    	getSharedPreferences(PREFERENCE_FILENAME, 0).edit().clear().commit();
+    	
+    	// Bring user to the ContactInfo activity if no preferences saved.
+    	if (!settings.contains(LOOKUP_ID))
+    	{
+    		toast("Please choose a contact (preferably yourself) to highfive");
+    		changeContactInfo();
+    	}
 
         mInfoText = (TextView) findViewById(R.id.textView);
         // Check for available NFC Adapter
@@ -212,38 +224,28 @@ public class Beam extends Activity implements
             	return true;
             case R.id.menu_help:
             	// First check if user has NFC disabled and notify them if so.
-            	if (!mNfcAdapter.isEnabled())
+            	if (!mNfcAdapter.isEnabled()) // TODO: remove later
             	    toast(R.string.nfc_disabled);
-            	
-            	// Workaround to extend toast popup time to approximately 10 seconds.
-            	// http://stackoverflow.com/a/7173248/72321
-            	final Toast tag = Toast.makeText(getBaseContext(), R.string.info, Toast.LENGTH_SHORT);
-            	tag.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0);
-            	tag.show();
-            	new CountDownTimer(15000, 1000)
-            	{
-            	    public void onTick(long millisUntilFinished) {tag.show();}
-            	    public void onFinish() {tag.show();}
-            	}.start();
-                
+            	timedToast(R.string.info, 15000);
             	return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
     
-    /** Called when the user clicks the Send button (via android:onClick in xml.)  */
+    /** Called from within this class. */
+    public void changeContactInfo() {
+    	startActivity(new Intent(this, ContactInfo.class));
+    }
+    
+    /** Called when the user clicks the Send button. */
     public void changeContactInfo(View view) {
-    	// Intent objects are used to provide runtime binding between separate components (e.g. starting another activity).
-    	// Intents can also carry a bundle of data to the given activity. 
-    	// The second argument refers to the class of the component that the intent will be delivered to.
-    	// You can also have _implicit_ intents, where the desired component is not specified (for interacting with other apps).
-    	Intent intent = new Intent(this, ContactInfo.class);
-    	startActivity(intent);
+    	startActivity(new Intent(this, ContactInfo.class));
     }
     
     /**
-     * Calls our toast method with a string. Allows for us to do `toast(R.string.foo)`.
+     * Calls our toast method with a string.
+     * Allows for us to do `toast(R.string.foo)`.
      * @param id
      */
     public void toast(int id) {
@@ -259,4 +261,33 @@ public class Beam extends Activity implements
 		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0);
 		toast.show();
 	}
+    
+    /**
+     * Calls our timedToast method with a string.
+     * Allows for us to do `timedToast(R.string.foo, 10000)`.
+     * @param id
+     * @param milliseconds
+     */
+    public void timedToast(int id, long milliseconds)
+    {
+    	timedToast(getString(id), milliseconds);
+    }
+    
+    /**
+     * Workaround to extend the time of a toast.
+     * http://stackoverflow.com/a/7173248/72321
+     * @param message
+     * @param milliseconds
+     */
+    public void timedToast(String message, long milliseconds)
+    {
+    	final Toast tag = Toast.makeText(getBaseContext(), message, Toast.LENGTH_SHORT);
+    	tag.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0);
+    	tag.show();
+    	new CountDownTimer(15000, 1000)
+    	{
+    	    public void onTick(long millisUntilFinished) {tag.show();}
+    	    public void onFinish() {tag.show();}
+    	}.start();
+    }
 }
