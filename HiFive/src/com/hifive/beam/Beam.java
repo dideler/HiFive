@@ -152,8 +152,28 @@ public class Beam extends Activity implements
           * uses the tag dispatch system.
           */
           //,NdefRecord.createApplicationRecord("com.example.android.beam")
+                    
         });
+     // send the contact as a vCard NDEFMessage
+        
         return msg;
+    }
+    
+    /**
+     * Generates an NdefRecord corresponding to the current contact, as defined in
+     * the Beam.VCARD static variable.
+     * @return NdefRecord containing the contact info to beam
+     */
+    private NdefRecord getContactRecord(){
+    	if (Beam.VCARD.length() <= 0) return null;
+    	else{
+    		byte[] uriField = Beam.VCARD.getBytes(Charset.forName("US-ASCII"));
+            byte[] payload = new byte[uriField.length + 1];              //add 1 for the URI Prefix
+            System.arraycopy(uriField, 0, payload, 1, uriField.length);  //appends URI to payload
+            NdefRecord nfcRecord = new NdefRecord(
+                NdefRecord.TNF_MIME_MEDIA, "text/vcard".getBytes(), new byte[0], payload);
+            return nfcRecord;
+    	}
     }
 
     /**
