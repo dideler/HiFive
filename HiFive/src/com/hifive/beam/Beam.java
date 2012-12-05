@@ -65,6 +65,7 @@ public class Beam extends Activity implements
 {
     NfcAdapter mNfcAdapter;
     TextView mInfoText;
+    public static SharedPreferences settings;
 	private static final String TAG = "Beam";
     private static final int MESSAGE_SENT = 1;
     public static final int PREF_REQUEST_CODE = 13;
@@ -88,7 +89,7 @@ public class Beam extends Activity implements
         else  // Good to go!
         {
         	// Check if NFC is enabled.
-        	if (!mNfcAdapter.isEnabled()) // TODO: make it a notification
+        	if (!mNfcAdapter.isEnabled()) // TODO: make it a notification (https://github.com/TeamHi5/HiFive/issues/9)
             {
         	    toast(R.string.nfc_disabled);
             }
@@ -106,7 +107,7 @@ public class Beam extends Activity implements
         	//getSharedPreferences(PREFERENCE_FILENAME, 0).edit().clear().commit();
             
         	// Load lookupKey from saved preferences.
-        	SharedPreferences settings = getSharedPreferences(PREFERENCE_FILENAME, MODE_PRIVATE);
+        	settings = getSharedPreferences(PREFERENCE_FILENAME, MODE_PRIVATE);
         	String lookupKey = settings.getString(LOOKUP_ID, "No ID found!");
         	Log.i(TAG, lookupKey);
         	
@@ -116,9 +117,10 @@ public class Beam extends Activity implements
         		toast(R.string.choose_contact);
         		changeContactInfo();
         	}
-        	
-        	// Load vCard data.
-        	// TODO
+        	else  // Load vCard data.
+        	{
+        		loadVcard(lookupKey); // TODO: test it's working
+        	}
         	
             // Register callback to set NDEF message
             mNfcAdapter.setNdefPushMessageCallback(this, this);
@@ -241,9 +243,6 @@ public class Beam extends Activity implements
             	startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
             	return true;
             case R.id.menu_help:
-            	// First check if user has NFC disabled and notify them if so.
-            	if (!mNfcAdapter.isEnabled()) // TODO: remove later
-            	    toast(R.string.nfc_disabled);
             	timedToast(R.string.info, 15000);
             	return true;
             default:
@@ -275,8 +274,8 @@ public class Beam extends Activity implements
     	    FileInputStream fis = fd.createInputStream();
     	    byte[] b = new byte[(int) fd.getDeclaredLength()];
     	    fis.read(b);
-    	    Beam.VCARD = new String(b);
-    	    Log.d(TAG, Beam.VCARD);
+    	    VCARD = new String(b);
+    	    Log.d(TAG, VCARD);
     	}
     	catch (FileNotFoundException e) { e.printStackTrace(); }
     	catch (IOException e) { e.printStackTrace(); }

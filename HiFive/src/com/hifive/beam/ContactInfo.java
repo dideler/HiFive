@@ -49,10 +49,10 @@ public class ContactInfo extends Activity {
         number.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         
         // Display contact's name if a contact has been set.
-    	SharedPreferences settings = getSharedPreferences(Beam.PREFERENCE_FILENAME, MODE_PRIVATE);
-    	if (settings.contains(Beam.CONTACT_NAME))
+    	Beam.settings = getSharedPreferences(Beam.PREFERENCE_FILENAME, MODE_PRIVATE);
+    	if (Beam.settings.contains(Beam.CONTACT_NAME))
     	{
-        	String name = settings.getString(Beam.CONTACT_NAME, "Anonymous");
+        	String name = Beam.settings.getString(Beam.CONTACT_NAME, "Anonymous");
     		((TextView) findViewById(R.id.contactName)).setText(name);
     	}
     }
@@ -126,8 +126,8 @@ public class ContactInfo extends Activity {
     public void setContact(String lookupKey, String name)
     {
     	// Get the application settings and open the editor.
-    	SharedPreferences settings = getSharedPreferences(Beam.PREFERENCE_FILENAME, MODE_PRIVATE);
-    	SharedPreferences.Editor prefEditor = settings.edit();
+    	Beam.settings = getSharedPreferences(Beam.PREFERENCE_FILENAME, MODE_PRIVATE);
+    	SharedPreferences.Editor prefEditor = Beam.settings.edit();
  
     	// Save the lookupKey as an application preference.
 		if (!lookupKey.isEmpty()) prefEditor.putString(Beam.LOOKUP_ID, lookupKey);
