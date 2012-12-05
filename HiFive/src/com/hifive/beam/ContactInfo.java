@@ -101,12 +101,12 @@ public class ContactInfo extends Activity {
     		
     		try
     		{
-        	    AssetFileDescriptor fd = getContentResolver().openAssetFileDescriptor(uri, "r"); // TODO: is context. needed?
+        	    AssetFileDescriptor fd = getContentResolver().openAssetFileDescriptor(uri, "r"); // is context. needed?
         	    FileInputStream fis = fd.createInputStream();
         	    byte[] b = new byte[(int) fd.getDeclaredLength()];
         	    fis.read(b);
-        	    String vCard = new String(b);
-        	    Log.d(TAG, vCard);
+        	    Beam.VCARD = new String(b);
+        	    Log.d(TAG, Beam.VCARD);
     		}
     		catch (FileNotFoundException e) { e.printStackTrace(); }
     		catch (IOException e) { e.printStackTrace(); }

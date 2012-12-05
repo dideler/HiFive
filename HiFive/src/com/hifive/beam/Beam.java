@@ -24,12 +24,17 @@
 
 package com.hifive.beam;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.charset.Charset;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetFileDescriptor;
+import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -42,6 +47,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
 import android.os.Vibrator;
+import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.text.format.Time;
 import android.util.Log;
@@ -65,6 +71,7 @@ public class Beam extends Activity implements
     public static final String PREFERENCE_FILENAME = "ContactsPrefs";
     public static final String LOOKUP_ID = "ContactID";
     public static final String CONTACT_NAME = "ContactName";
+    public static String VCARD = ""; // Not final because it can change during runtime.
     
 
     @Override
@@ -78,7 +85,7 @@ public class Beam extends Activity implements
     	Log.i(TAG, lookupKey);
     	
     	// Delete all preferences -- for testing only.
-    	//getSharedPreferences(PREFERENCE_FILENAME, 0).edit().clear().commit();
+    	getSharedPreferences(PREFERENCE_FILENAME, 0).edit().clear().commit();
     	
     	// Bring user to the ContactInfo activity if no preferences saved.
     	if (!settings.contains(LOOKUP_ID))
@@ -94,19 +101,26 @@ public class Beam extends Activity implements
         {
             mInfoText.setText("NFC is not available on this device.");
         }
-        // Check if NFC is enabled.
-        else if (!mNfcAdapter.isEnabled()) // TODO: make it a notification
-        {
-            Toast.makeText(this, R.string.nfc_disabled, Toast.LENGTH_LONG).show();
-    	    //toast(R.string.nfc_disabled);
-        }
-        // Check if Android Beam is enabled.
-        // else if (!mNfcAdapter.isNdefPushEnabled()) // Available in API 16 and up.
-        //{
-        //	toast(R.string.beam_disabled);
-        //}
         else  // Good to go!
         {
+        	// Check if NFC is enabled.
+        	if (!mNfcAdapter.isEnabled()) // TODO: make it a notification
+            {
+        	    toast(R.string.nfc_disabled);
+            }
+        	
+        	// Check if Android Beam is enabled.
+            // else if (!mNfcAdapter.isNdefPushEnabled()) // Available in API 16 and up.
+            //{
+            //	toast(R.string.beam_disabled);
+            //}
+        	
+        	// TODO: Verify this stuff is still executed if user is brought to ContactInfo activity on startup.
+        	//		 Otherwise we should put this section in a method so we can repeat calls to it.
+        	
+        	toast("test");
+        	// Load vCard data.
+        	
             // Register callback to set NDEF message
             mNfcAdapter.setNdefPushMessageCallback(this, this);
             // Register callback to listen for message-sent success
@@ -247,9 +261,25 @@ public class Beam extends Activity implements
     	startActivity(new Intent(this, ContactInfo.class));
     }
     
-    public void loadVcard()
+    /**
+     * Load a contact's vCard data based on their phone number.
+     * Repeat code from ContactInfo class. We can refactor code later.
+     */
+    public void loadVcard(String lookupKey)
     {
-    	// TODO
+    	Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey);     
+
+    	try
+    	{
+    	    AssetFileDescriptor fd = getContentResolver().openAssetFileDescriptor(uri, "r");
+    	    FileInputStream fis = fd.createInputStream();
+    	    byte[] b = new byte[(int) fd.getDeclaredLength()];
+    	    fis.read(b);
+    	    Beam.VCARD = new String(b);
+    	    Log.d(TAG, Beam.VCARD);
+    	}
+    	catch (FileNotFoundException e) { e.printStackTrace(); }
+    	catch (IOException e) { e.printStackTrace(); }
     }
     
     // TODO: move all toast methods to their own class
