@@ -29,8 +29,14 @@
         android:id="@+id/contactName"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp" />
+        android:layout_marginTop="50dip"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:textSize="25sp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:scrollHorizontally="true"
+        android:singleLine="true" />
     <!-- Might have to change width properties for people with long names. -->
         
 </LinearLayout>

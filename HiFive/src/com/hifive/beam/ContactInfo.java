@@ -5,12 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.net.Uri;
-import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.PhoneLookup;
@@ -84,6 +82,7 @@ public class ContactInfo extends Activity {
             		
             		// Display contact's name (or other identifying info if no name).
             		((TextView) findViewById(R.id.contactName)).setText(name);
+            		toast("This is who you'll highfive to others!");
             		
             		Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey);     
             		
