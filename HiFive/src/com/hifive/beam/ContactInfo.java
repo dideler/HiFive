@@ -50,9 +50,9 @@ public class ContactInfo extends Activity {
         
         // Display contact's name if a contact has been set.
     	SharedPreferences settings = getSharedPreferences(Beam.PREFERENCE_FILENAME, MODE_PRIVATE);
-    	if (settings.contains(Beam.NAME))
+    	if (settings.contains(Beam.CONTACT_NAME))
     	{
-        	String name = settings.getString(Beam.NAME, "Anonymous");
+        	String name = settings.getString(Beam.CONTACT_NAME, "Anonymous");
     		((TextView) findViewById(R.id.contactName)).setText(name);
     	}
     }
@@ -133,7 +133,7 @@ public class ContactInfo extends Activity {
 		if (!lookupKey.isEmpty()) prefEditor.putString(Beam.LOOKUP_ID, lookupKey);
 		
     	// Save name as an application preference.
-		if (!name.isEmpty()) prefEditor.putString(Beam.NAME, name);
+		if (!name.isEmpty()) prefEditor.putString(Beam.CONTACT_NAME, name);
 
 		// Commit the changes to the preferences.
 		prefEditor.commit();

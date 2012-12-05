@@ -64,7 +64,7 @@ public class Beam extends Activity implements
     public static final int PREF_REQUEST_CODE = 13;
     public static final String PREFERENCE_FILENAME = "ContactsPrefs";
     public static final String LOOKUP_ID = "ContactID";
-    public static final String NAME = "ContactName";
+    public static final String CONTACT_NAME = "ContactName";
     
 
     @Override
