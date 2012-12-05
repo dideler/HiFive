@@ -76,27 +76,30 @@ public class Beam extends Activity implements
     	String lookupKey = settings.getString(LOOKUP_ID, "No ID found!");
     	Log.i(TAG, lookupKey);
     	
-    	getSharedPreferences(PREFERENCE_FILENAME, 0).edit().clear().commit();
+    	// Delete all preferences -- for testing only.
+    	// getSharedPreferences(PREFERENCE_FILENAME, 0).edit().clear().commit();
     	
     	// Bring user to the ContactInfo activity if no preferences saved.
     	if (!settings.contains(LOOKUP_ID))
     	{
-    		toast("Please choose a contact (preferably yourself) to highfive");
+    		toast(R.string.choose_contact);
     		changeContactInfo();
     	}
 
         mInfoText = (TextView) findViewById(R.id.textView);
-        // Check for available NFC Adapter
+        // Check for available NFC Adapter.
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mNfcAdapter == null)
         {
             mInfoText.setText("NFC is not available on this device.");
         }
+        // Check if NFC is enabled.
         else if (!mNfcAdapter.isEnabled()) // TODO: make it a notification
         {
             Toast.makeText(this, R.string.nfc_disabled, Toast.LENGTH_LONG).show();
     	    //toast(R.string.nfc_disabled);
         }
+        // Check if Android Beam is enabled.
         // else if (!mNfcAdapter.isNdefPushEnabled()) // Available in API 16 and up.
         //{
         //	toast(R.string.beam_disabled);
@@ -242,6 +245,8 @@ public class Beam extends Activity implements
     public void changeContactInfo(View view) {
     	startActivity(new Intent(this, ContactInfo.class));
     }
+    
+    // TODO: move all toast methods to their own class
     
     /**
      * Calls our toast method with a string.

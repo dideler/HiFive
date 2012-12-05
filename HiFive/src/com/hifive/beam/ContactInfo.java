@@ -5,17 +5,23 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.PhoneLookup;
+import android.provider.Settings;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,7 +88,7 @@ public class ContactInfo extends Activity {
     		
     		// Display contact's name (or other identifying info if no name).
     		((TextView) findViewById(R.id.contactName)).setText(name);
-    		toast("This is who you'll highfive to others!");
+    		toast(R.string.contact_chosen_feedback);
     		
     		Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey);     
     		
@@ -102,7 +108,7 @@ public class ContactInfo extends Activity {
     	}
     	else
     	{
-    		toast("I couldn't find a contact with that phone number. Want to try another number?");
+    		toast(R.string.contact_not_found);
     	}
     }
     
@@ -124,6 +130,32 @@ public class ContactInfo extends Activity {
 		Log.i(TAG, "Saved: " + lookupKey);
     }
     
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options, menu);
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_beam_settings: // Android Beam setting
+                startActivity(new Intent(Settings.ACTION_NFCSHARING_SETTINGS));
+                return true;
+            case R.id.menu_nfc_settings: // Wireless (which includes NFC) setting
+            	startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+            	return true;
+            case R.id.menu_help:
+            	timedToast(R.string.info, 15000);
+            	return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    
+    // TODO: move all toast methods to their own class
+
     /**
      * Calls our toast method with a string. Allows for us to do `toast(R.string.foo)`.
      * @param id
@@ -141,4 +173,33 @@ public class ContactInfo extends Activity {
 		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0);
 		toast.show();
 	}
+    
+    /**
+     * Calls our timedToast method with a string.
+     * Allows for us to do `timedToast(R.string.foo, 10000)`.
+     * @param id
+     * @param milliseconds
+     */
+    public void timedToast(int id, long milliseconds)
+    {
+    	timedToast(getString(id), milliseconds);
+    }
+    
+    /**
+     * Workaround to extend the time of a toast.
+     * http://stackoverflow.com/a/7173248/72321
+     * @param message
+     * @param milliseconds
+     */
+    public void timedToast(String message, long milliseconds)
+    {
+    	final Toast tag = Toast.makeText(getBaseContext(), message, Toast.LENGTH_SHORT);
+    	tag.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0);
+    	tag.show();
+    	new CountDownTimer(15000, 1000)
+    	{
+    	    public void onTick(long millisUntilFinished) {tag.show();}
+    	    public void onFinish() {tag.show();}
+    	}.start();
+    }
 }
