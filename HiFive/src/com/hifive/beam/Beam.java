@@ -82,6 +82,7 @@ public class Beam extends Activity implements
 
         mInfoText = (TextView) findViewById(R.id.textView);
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+    	settings = getSharedPreferences(PREFERENCE_FILENAME, MODE_PRIVATE);
         if (mNfcAdapter == null)  // Check for available NFC Adapter.
         {
             mInfoText.setText("NFC is not available on this device.");
@@ -106,8 +107,7 @@ public class Beam extends Activity implements
         	// Delete all preferences -- for testing only!
         	//getSharedPreferences(PREFERENCE_FILENAME, 0).edit().clear().commit();
             
-        	// Load lookupKey from saved preferences.
-        	settings = getSharedPreferences(PREFERENCE_FILENAME, MODE_PRIVATE);
+        	// Load lookupKey from saved preferences.v
         	String lookupKey = settings.getString(LOOKUP_ID, "No ID found!");
         	Log.i(TAG, lookupKey);
         	
@@ -123,10 +123,10 @@ public class Beam extends Activity implements
         	}
         	
         	// TODO: we'll probably move this to onresume
-            // Register callback to set NDEF message
-            mNfcAdapter.setNdefPushMessageCallback(this, this);
-            // Register callback to listen for message-sent success
-            mNfcAdapter.setOnNdefPushCompleteCallback(this, this);
+//            // Register callback to set NDEF message
+//            mNfcAdapter.setNdefPushMessageCallback(this, this);
+//            // Register callback to listen for message-sent success
+//            mNfcAdapter.setOnNdefPushCompleteCallback(this, this);
         }
     }
 
@@ -138,22 +138,23 @@ public class Beam extends Activity implements
     public NdefMessage createNdefMessage(NfcEvent event) {
         Time time = new Time();
         time.setToNow();
-        String text = ("Beam me up!\n\n" +
-                "Beam Time: " + time.format("%H:%M:%S"));
-        NdefMessage msg = new NdefMessage(
-                new NdefRecord[] { createMimeRecord(
-                        "application/com.example.android.beam", text.getBytes())
-         /**
-          * The Android Application Record (AAR) is commented out. When a device
-          * receives a push with an AAR in it, the application specified in the AAR
-          * is guaranteed to run. The AAR overrides the tag dispatch system.
-          * You can add it back in to guarantee that this
-          * activity starts when receiving a beamed message. For now, this code
-          * uses the tag dispatch system.
-          */
-          //,NdefRecord.createApplicationRecord("com.example.android.beam")
-                    
-        });
+//        String text = ("Beam me up!\n\n" +
+//                "Beam Time: " + time.format("%H:%M:%S"));
+        NdefMessage msg = new NdefMessage(new NdefRecord[] {getContactRecord()});
+//        NdefMessage msg = new NdefMessage(
+//                new NdefRecord[] { createMimeRecord(
+//                        "application/com.example.android.beam", text.getBytes())
+//         /**
+//          * The Android Application Record (AAR) is commented out. When a device
+//          * receives a push with an AAR in it, the application specified in the AAR
+//          * is guaranteed to run. The AAR overrides the tag dispatch system.
+//          * You can add it back in to guarantee that this
+//          * activity starts when receiving a beamed message. For now, this code
+//          * uses the tag dispatch system.
+//          */
+//          //,NdefRecord.createApplicationRecord("com.example.android.beam")
+//                    
+//        });
      // send the contact as a vCard NDEFMessage
         
         return msg;
@@ -211,15 +212,18 @@ public class Beam extends Activity implements
         }
         // TODO: check if NFC & Android Beam are still enabled
     	
-        if (!settings.contains(LOOKUP_ID))
+        if (settings != null && !settings.contains(LOOKUP_ID))
         {
         	toast(R.string.forgot_set_contact); // temporary
         	//toast(R.string.choose_contact);
     		//changeContactInfo();
         }
-        else
-        {
+        else if (mNfcAdapter != null){
         	// set callbacks, create message, etc.
+        	// Register callback to set NDEF message
+            mNfcAdapter.setNdefPushMessageCallback(this, this);
+            // Register callback to listen for message-sent success
+            mNfcAdapter.setOnNdefPushCompleteCallback(this, this);
         }
     }
 
