@@ -90,10 +90,7 @@ public class Beam extends Activity implements
         //{
         //	toast(R.string.beam_disabled);
         //}
-    	
-    	// TODO: Verify this stuff is still executed if user is brought to ContactInfo activity on startup.
-    	//		 Otherwise we should put this section in a method so we can repeat calls to it.
-    	
+    	    	
     	// Delete all preferences -- for testing only!
     	//getSharedPreferences(PREFERENCE_FILENAME, 0).edit().clear().commit();
         
@@ -109,7 +106,7 @@ public class Beam extends Activity implements
     	}
     	else  // Load vCard data.
     	{
-    		loadVcard(lookupKey); // TODO: test it's working
+    		loadVcard(lookupKey);
     	}
     	// NOTE: NDEF callbacks moved to onResume.
     }
