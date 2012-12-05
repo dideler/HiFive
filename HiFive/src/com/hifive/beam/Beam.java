@@ -61,7 +61,7 @@ public class Beam extends Activity implements
     private static final int MESSAGE_SENT = 1;
     public static final int PREF_REQUEST_CODE = 13;
     public static final String PREFERENCE_FILENAME = "ContactsPrefs";
-    public static final String LOOKUP_ID = "userContactID"; // TODO: phone number vs lookup key?
+    public static final String LOOKUP_ID = "ContactID";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

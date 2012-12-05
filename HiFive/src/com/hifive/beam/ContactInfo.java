@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
@@ -96,6 +97,8 @@ public class ContactInfo extends Activity {
     		}
     		catch (FileNotFoundException e) { e.printStackTrace(); }
     		catch (IOException e) { e.printStackTrace(); }
+    		
+    		setContact(lookupKey);
     	}
     	else
     	{
@@ -103,9 +106,22 @@ public class ContactInfo extends Activity {
     	}
     }
     
-    public void setContact()
+    /**
+     * Saves a piece of identifying info from the chosen contact,
+     * so we can remember who it is for the next use of app.
+     */
+    public void setContact(String lookupKey)
     {
-    	// TODO
+    	// Get the application settings and open the editor.
+        SharedPreferences settings = getSharedPreferences(Beam.PREFERENCE_FILENAME, MODE_PRIVATE);
+        SharedPreferences.Editor prefEditor = settings.edit();
+        
+        // Save the lookupKey as an application preference.
+		if (!lookupKey.isEmpty()) prefEditor.putString(Beam.LOOKUP_ID, lookupKey);
+		
+		// Commit the changes to the preferences.
+		prefEditor.commit();
+		Log.i(TAG, "Saved: " + lookupKey);
     }
     
     /**
