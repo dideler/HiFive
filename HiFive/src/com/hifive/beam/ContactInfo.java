@@ -1,3 +1,10 @@
+/**
+ * Copyright (C) 2012 Team High Five!
+ * Mobile Computing - Final Project
+ * @author Dennis Ideler (ideler.dennis@gmail.com)
+ * @author Chris Stinson (chris.the.stinson@gmail.com) 
+ */
+
 package com.hifive.beam;
 
 import java.io.FileInputStream;
