@@ -84,48 +84,34 @@ public class Beam extends Activity implements
         mInfoText = (TextView) findViewById(R.id.textView);
         
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        if (mNfcAdapter == null)  // Check for available NFC Adapter.
-        {
-            mInfoText.setText(R.string.nfc_not_available);
-        }
-        else  // Good to go!
-        {
-        	// Check if NFC is enabled.
-        	// TODO: make it a notification (https://github.com/TeamHi5/HiFive/issues/9)
-        	// TODO: put in its own function
-        	if (!mNfcAdapter.isEnabled())
-            {
-        	    toast(R.string.nfc_disabled);
-            }
         	
-        	// Check if Android Beam is enabled.
-            // else if (!mNfcAdapter.isNdefPushEnabled()) // Available in API 16 and up.
-            //{
-            //	toast(R.string.beam_disabled);
-            //}
-        	
-        	// TODO: Verify this stuff is still executed if user is brought to ContactInfo activity on startup.
-        	//		 Otherwise we should put this section in a method so we can repeat calls to it.
-        	
-        	// Delete all preferences -- for testing only!
-        	getSharedPreferences(PREFERENCE_FILENAME, 0).edit().clear().commit();
-            
-        	// Load lookupKey from saved preferences.
-        	String lookupKey = settings.getString(LOOKUP_ID, "No ID found!");
-        	Log.i(TAG, lookupKey);
-        	
-        	// Bring user to the ContactInfo activity if no preferences saved.
-        	if (!settings.contains(LOOKUP_ID))
-        	{
-        		toast(R.string.choose_contact);
-        		changeContactInfo();
-        	}
-        	else  // Load vCard data.
-        	{
-        		loadVcard(lookupKey); // TODO: test it's working
-        	}
-        	// NOTE: NDEF callbacks moved to onResume.
-        }
+    	// Check if Android Beam is enabled.
+        // else if (!mNfcAdapter.isNdefPushEnabled()) // Available in API 16 and up.
+        //{
+        //	toast(R.string.beam_disabled);
+        //}
+    	
+    	// TODO: Verify this stuff is still executed if user is brought to ContactInfo activity on startup.
+    	//		 Otherwise we should put this section in a method so we can repeat calls to it.
+    	
+    	// Delete all preferences -- for testing only!
+    	getSharedPreferences(PREFERENCE_FILENAME, 0).edit().clear().commit();
+        
+    	// Load lookupKey from saved preferences.
+    	String lookupKey = settings.getString(LOOKUP_ID, "No ID found!");
+    	Log.i(TAG, lookupKey);
+    	
+    	// Bring user to the ContactInfo activity if no preferences saved.
+    	if (!settings.contains(LOOKUP_ID))
+    	{
+    		toast(R.string.choose_contact);
+    		changeContactInfo();
+    	}
+    	else  // Load vCard data.
+    	{
+    		loadVcard(lookupKey); // TODO: test it's working
+    	}
+    	// NOTE: NDEF callbacks moved to onResume.
     }
 
 
@@ -205,22 +191,30 @@ public class Beam extends Activity implements
 
     @Override
     public void onResume() {
-        super.onResume();
-        // TODO: check if NFC & Android Beam are still enabled
-    	
-        if (settings != null && !settings.contains(LOOKUP_ID)) // TODO: might be better to check if vcard is empty
+    	mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        if (mNfcAdapter == null)  // Check for available NFC Adapter.
         {
-        	toast(R.string.forgot_set_contact); // temporary
-        	//toast(R.string.choose_contact);
-    		//changeContactInfo();
+            mInfoText.setText("NFC is not available on this device.");
         }
-        else if (mNfcAdapter != null)
+        else if (!mNfcAdapter.isEnabled()) // Check if NFC is enabled.
         {
-        	// set callbacks, create message, etc.
-        	// Register callback to set NDEF message
-            mNfcAdapter.setNdefPushMessageCallback(this, this);
-            // Register callback to listen for message-sent success
-            mNfcAdapter.setOnNdefPushCompleteCallback(this, this);
+        	mInfoText.setText(R.string.nfc_disabled);
+        }
+        else // good to go!
+        {
+            if (VCARD.length() <= 0)	// ensure contact has been set
+            {
+            	mInfoText.setText(R.string.forgot_set_contact);
+            	//toast(R.string.choose_contact);
+        		//changeContactInfo();
+            }
+            else if (mNfcAdapter != null)
+            {
+            	// Register callback to set NDEF message
+                mNfcAdapter.setNdefPushMessageCallback(this, this);
+                // Register callback to listen for message-sent success
+                mNfcAdapter.setOnNdefPushCompleteCallback(this, this);
+            }
         }
     }
 
