@@ -78,26 +78,10 @@ public class Beam extends Activity implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        
-        // Load lookupKey from saved preferences.
-        SharedPreferences settings = getSharedPreferences(PREFERENCE_FILENAME, MODE_PRIVATE);
-    	String lookupKey = settings.getString(LOOKUP_ID, "No ID found!");
-    	Log.i(TAG, lookupKey);
-    	
-    	// Delete all preferences -- for testing only.
-    	getSharedPreferences(PREFERENCE_FILENAME, 0).edit().clear().commit();
-    	
-    	// Bring user to the ContactInfo activity if no preferences saved.
-    	if (!settings.contains(LOOKUP_ID))
-    	{
-    		toast(R.string.choose_contact);
-    		changeContactInfo();
-    	}
 
         mInfoText = (TextView) findViewById(R.id.textView);
-        // Check for available NFC Adapter.
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        if (mNfcAdapter == null)
+        if (mNfcAdapter == null)  // Check for available NFC Adapter.
         {
             mInfoText.setText("NFC is not available on this device.");
         }
@@ -118,8 +102,23 @@ public class Beam extends Activity implements
         	// TODO: Verify this stuff is still executed if user is brought to ContactInfo activity on startup.
         	//		 Otherwise we should put this section in a method so we can repeat calls to it.
         	
-        	toast("test");
+        	// Delete all preferences -- for testing only!
+        	//getSharedPreferences(PREFERENCE_FILENAME, 0).edit().clear().commit();
+            
+        	// Load lookupKey from saved preferences.
+        	SharedPreferences settings = getSharedPreferences(PREFERENCE_FILENAME, MODE_PRIVATE);
+        	String lookupKey = settings.getString(LOOKUP_ID, "No ID found!");
+        	Log.i(TAG, lookupKey);
+        	
+        	// Bring user to the ContactInfo activity if no preferences saved.
+        	if (!settings.contains(LOOKUP_ID))
+        	{
+        		toast(R.string.choose_contact);
+        		changeContactInfo();
+        	}
+        	
         	// Load vCard data.
+        	// TODO
         	
             // Register callback to set NDEF message
             mNfcAdapter.setNdefPushMessageCallback(this, this);
@@ -188,6 +187,7 @@ public class Beam extends Activity implements
             processIntent(getIntent());
         }
         // TODO: check if NFC & Android Beam are still enabled
+    	toast("onResume");
     }
 
     @Override
