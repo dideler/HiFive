@@ -95,7 +95,7 @@ public class Beam extends Activity implements
     	//		 Otherwise we should put this section in a method so we can repeat calls to it.
     	
     	// Delete all preferences -- for testing only!
-    	getSharedPreferences(PREFERENCE_FILENAME, 0).edit().clear().commit();
+    	//getSharedPreferences(PREFERENCE_FILENAME, 0).edit().clear().commit();
         
     	// Load lookupKey from saved preferences.
     	String lookupKey = settings.getString(LOOKUP_ID, "No ID found!");
