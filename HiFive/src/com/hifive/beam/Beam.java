@@ -43,7 +43,7 @@ public class Beam extends Activity implements
 	CreateNdefMessageCallback, OnNdefPushCompleteCallback
 {
     NfcAdapter mNfcAdapter;
-    TextView mInfoText;
+    TextView statusbar;
     public static SharedPreferences settings;
 	private static final String TAG = "Beam";
     private static final int MESSAGE_SENT = 1;
@@ -60,7 +60,7 @@ public class Beam extends Activity implements
         setContentView(R.layout.main);
 
     	settings = getSharedPreferences(PREFERENCE_FILENAME, MODE_PRIVATE);
-        mInfoText = (TextView) findViewById(R.id.textView);
+        statusbar = (TextView) findViewById(R.id.textView);
         
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         	
@@ -141,20 +141,20 @@ public class Beam extends Activity implements
     {
     	super.onResume();
     	mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-    	mInfoText.setText("");
+    	statusbar.setText("");
         if (mNfcAdapter == null)  // Check for available NFC Adapter.
         {
-            mInfoText.setText(R.string.nfc_not_available);
+            statusbar.setText(R.string.nfc_not_available);
         }
         else if (!mNfcAdapter.isEnabled()) // Check if NFC is enabled.
         {
-        	mInfoText.setText(R.string.nfc_disabled);
+        	statusbar.setText(R.string.nfc_disabled);
         }
         else // good to go!
         {
             if (VCARD.length() <= 0)  // Ensure contact has been set.
             {
-            	mInfoText.setText(R.string.forgot_set_contact);
+            	statusbar.setText(R.string.forgot_set_contact);
             	//toast(R.string.choose_contact);
         		//changeContactInfo();
             }
