@@ -116,29 +116,13 @@ public class Beam extends Activity implements
 
 
     /**
-     * Implementation for the CreateNdefMessageCallback interface
+     * Implementation for the CreateNdefMessageCallback interface.
+     * NDEFMessage contains the contact as vCard-formatted data.
      */
     @Override
     public NdefMessage createNdefMessage(NfcEvent event)
     {
-    	NdefMessage msg = new NdefMessage(new NdefRecord[] { getContactRecord() });
-//        NdefMessage msg = new NdefMessage(
-//                new NdefRecord[] { createMimeRecord(
-//                        "application/com.example.android.beam", text.getBytes())
-//         /**
-//          * The Android Application Record (AAR) is commented out. When a device
-//          * receives a push with an AAR in it, the application specified in the AAR
-//          * is guaranteed to run. The AAR overrides the tag dispatch system.
-//          * You can add it back in to guarantee that this
-//          * activity starts when receiving a beamed message. For now, this code
-//          * uses the tag dispatch system.
-//          */
-//          //,NdefRecord.createApplicationRecord("com.example.android.beam")
-//                    
-//        });
-     
-    	// NDEFMessage contains the contact as vCard-formatted data.
-        return msg;
+    	return new NdefMessage(new NdefRecord[] { getContactRecord() });
     }
     
     /**
@@ -148,14 +132,14 @@ public class Beam extends Activity implements
      */
     private NdefRecord getContactRecord()
     {
-    	if (VCARD.isEmpty())
+    	if (VCARD.isEmpty()) // TODO: test what happens on beam attempt
     	{
-    		return null; // TODO: test what happens on beam attempt
+    		return null; // Should be unreachable.
     	}
     	else
     	{
     		byte[] uriField = VCARD.getBytes(Charset.forName("US-ASCII"));
-            byte[] payload = new byte[uriField.length + 1];              //add 1 for the URI Prefix
+            byte[] payload = new byte[uriField.length + 1];  // Add 1 for the URI Prefix.
             System.arraycopy(uriField, 0, payload, 1, uriField.length);  //appends URI to payload
             NdefRecord nfcRecord = new NdefRecord(
                 NdefRecord.TNF_MIME_MEDIA, "text/vcard".getBytes(), new byte[0], payload);
@@ -190,7 +174,9 @@ public class Beam extends Activity implements
     };
 
     @Override
-    public void onResume() {
+    public void onResume()
+    {
+    	super.onResume();
     	mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mNfcAdapter == null)  // Check for available NFC Adapter.
         {
