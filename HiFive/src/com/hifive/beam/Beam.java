@@ -180,7 +180,7 @@ public class Beam extends Activity implements
     	mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mNfcAdapter == null)  // Check for available NFC Adapter.
         {
-            mInfoText.setText("NFC is not available on this device.");
+            mInfoText.setText(R.string.nfc_not_available);
         }
         else if (!mNfcAdapter.isEnabled()) // Check if NFC is enabled.
         {
