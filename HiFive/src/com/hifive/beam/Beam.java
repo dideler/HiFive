@@ -29,6 +29,7 @@ import java.nio.charset.Charset;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -58,11 +59,19 @@ public class Beam extends Activity implements
     NfcAdapter mNfcAdapter;
     TextView mInfoText;
     private static final int MESSAGE_SENT = 1;
+    public static final int PREF_REQUEST_CODE = 13;
+    public static final String PREFERENCE_FILENAME = "ContactsPrefs";
+    public static final String LOOKUP_ID = "userContactID"; // TODO: phone number vs lookup key?
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
+        // Load lookupKey from saved preferences.
+        SharedPreferences settings = getSharedPreferences(PREFERENCE_FILENAME, MODE_PRIVATE);
+    	String lookupKey = settings.getString(LOOKUP_ID, "No ID found!");
+    	toast(lookupKey);
 
         mInfoText = (TextView) findViewById(R.id.textView);
         // Check for available NFC Adapter
