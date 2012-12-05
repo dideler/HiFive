@@ -86,7 +86,7 @@ public class Beam extends Activity implements
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mNfcAdapter == null)  // Check for available NFC Adapter.
         {
-            mInfoText.setText("NFC is not available on this device.");
+            mInfoText.setText(R.string.nfc_not_available);
         }
         else  // Good to go!
         {
@@ -108,7 +108,7 @@ public class Beam extends Activity implements
         	//		 Otherwise we should put this section in a method so we can repeat calls to it.
         	
         	// Delete all preferences -- for testing only!
-        	//getSharedPreferences(PREFERENCE_FILENAME, 0).edit().clear().commit();
+        	getSharedPreferences(PREFERENCE_FILENAME, 0).edit().clear().commit();
             
         	// Load lookupKey from saved preferences.
         	String lookupKey = settings.getString(LOOKUP_ID, "No ID found!");
