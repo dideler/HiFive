@@ -22,4 +22,5 @@
     <string name="contact_chosen_feedback">This is who you\'ll highfive to others!</string>
     <string name="contact_not_chosen">(None chosen)</string>
     <string name="contact_label">Contact to be highfived:</string>
+    <string name="forgot_set_contact">You still need to set a contact!</string>
 </resources>

@@ -122,6 +122,7 @@ public class Beam extends Activity implements
         		loadVcard(lookupKey); // TODO: test it's working
         	}
         	
+        	// TODO: we'll probably move this to onresume
             // Register callback to set NDEF message
             mNfcAdapter.setNdefPushMessageCallback(this, this);
             // Register callback to listen for message-sent success
@@ -189,7 +190,17 @@ public class Beam extends Activity implements
             processIntent(getIntent());
         }
         // TODO: check if NFC & Android Beam are still enabled
-    	toast("onResume");
+    	
+        if (!settings.contains(LOOKUP_ID))
+        {
+        	toast(R.string.forgot_set_contact); // temporary
+        	//toast(R.string.choose_contact);
+    		//changeContactInfo();
+        }
+        else
+        {
+        	// set callbacks, create message, etc.
+        }
     }
 
     @Override
