@@ -23,6 +23,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:text="@string/button_search_contacts"
+        android:onClick="searchContact"
     />
 
     <TextView
