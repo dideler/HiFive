@@ -27,7 +27,7 @@ import android.widget.Toast;
  */
 public class ContactInfo extends Activity {
 	
-	private static final String TAG = "ContactPicker";
+	private static final String TAG = "ContactInfo";
     private static TextView number;
 	
     /** Called when the activity is first created. */
@@ -113,12 +113,12 @@ public class ContactInfo extends Activity {
     public void setContact(String lookupKey)
     {
     	// Get the application settings and open the editor.
-        SharedPreferences settings = getSharedPreferences(Beam.PREFERENCE_FILENAME, MODE_PRIVATE);
-        SharedPreferences.Editor prefEditor = settings.edit();
-        
-        // Save the lookupKey as an application preference.
+    	SharedPreferences settings = getSharedPreferences(Beam.PREFERENCE_FILENAME, MODE_PRIVATE);
+    	SharedPreferences.Editor prefEditor = settings.edit();
+ 
+    	// Save the lookupKey as an application preference.
 		if (!lookupKey.isEmpty()) prefEditor.putString(Beam.LOOKUP_ID, lookupKey);
-		
+
 		// Commit the changes to the preferences.
 		prefEditor.commit();
 		Log.i(TAG, "Saved: " + lookupKey);
