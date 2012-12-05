@@ -7,8 +7,7 @@
         2. Choose a contact to highfive\n(your choice will be remembered).\n
         3. Highfive this device with another that supports Android Beam and NFC.</string>
     <string name="nfc_not_available">NFC is not available on this device.</string>
-    <string name="nfc_disabled">Uh oh, NFC is disabled!\n
-        Enable it via the setting icon above.</string>
+    <string name="nfc_disabled">Enable NFC via the setting icon above.</string>
     <string name="beam_disabled">Uh oh, Android Beam is disabled!\n
         Enable it via the setting icon above.</string>
     <string name="beamed">Contact info sent!</string>
