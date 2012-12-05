@@ -132,18 +132,20 @@ public class Beam extends Activity implements
      */
     private NdefRecord getContactRecord()
     {
-    	if (VCARD.isEmpty()) // TODO: test what happens on beam attempt
+    	if (VCARD.isEmpty())  // If no contact is set...
     	{
-    		return null; // Should be unreachable.
+    		// Send an "empty" contact (vcard).
+    		// On receiving device, user will be prompted create a new contact.
+    		return null;
     	}
-    	else
+    	else  // Send the set contact.
     	{
     		byte[] uriField = VCARD.getBytes(Charset.forName("US-ASCII"));
-            byte[] payload = new byte[uriField.length + 1];  // Add 1 for the URI Prefix.
-            System.arraycopy(uriField, 0, payload, 1, uriField.length);  //appends URI to payload
-            NdefRecord nfcRecord = new NdefRecord(
-                NdefRecord.TNF_MIME_MEDIA, "text/vcard".getBytes(), new byte[0], payload);
-            return nfcRecord;
+    		byte[] payload = new byte[uriField.length + 1];  // Add 1 for the URI Prefix.
+    		System.arraycopy(uriField, 0, payload, 1, uriField.length);  //appends URI to payload
+    		NdefRecord nfcRecord = new NdefRecord(
+    				NdefRecord.TNF_MIME_MEDIA, "text/vcard".getBytes(), new byte[0], payload);
+    		return nfcRecord;
     	}
     }
 
