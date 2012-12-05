@@ -295,4 +295,10 @@ public class Beam extends Activity implements
     	    public void onFinish() {tag.show();}
     	}.start();
     }
+    
+    /** Clears the status bar */
+    public void clearStatus()
+    {
+    	statusbar.setText("");
+    }
 }
