@@ -46,7 +46,10 @@ public class ContactInfo extends Activity {
         // Handle button click by searching contacts
         ((Button) findViewById(R.id.search)).setOnClickListener(new OnClickListener()
         {
-        	// Searches for the contact by (given) phone number and gets their vCard-formatted data.
+        	/**
+        	 * Searches for a contact by (given) phone number
+        	 * and retrieves the contact's vCard-formatted data.
+        	 */
             public void onClick(View view)
             {
             	// This commented code shows or creates the contact
@@ -66,35 +69,30 @@ public class ContactInfo extends Activity {
             	}
             	String[] projection = new String[] { PhoneLookup.DISPLAY_NAME, PhoneLookup.LOOKUP_KEY };
             	Uri lookupUri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
-            	Log.i(TAG, lookupUri.toString());// e.g. content://com.android.contacts/phone_lookup/289-697-1010
             	
             	Cursor c = getContentResolver().query(lookupUri, projection, null, null, null);
-            	Log.i(TAG, Integer.toString(c.getCount())); // returns 2 rows for my test phone number 
-            	Log.d(TAG, DatabaseUtils.dumpCursorToString(c)); // duplicate records
+            	Log.d(TAG, DatabaseUtils.dumpCursorToString(c)); // dump contents of cursor
             	
             	// Verify that phone number returns info and move to the first row returned.
             	if (c != null && c.moveToFirst())
             	{
-	                String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)); // DISPLAY_NAME_PRIMARY will use other info if their name is not available
-	            	String lookupKey = c.getString(c.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
-	            	Log.i(TAG, lookupKey);
-	            	c.close();
-	
-	            	Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey);
-	            	Log.d(TAG, uri.toString());
-	            	
-	            	try
-	            	{
+            		String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)); // DISPLAY_NAME_PRIMARY will use other info if their name is not available
+            		String lookupKey = c.getString(c.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
+            		c.close();
+            		
+            		Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey);     
+            		
+            		try
+            		{
 	            	    AssetFileDescriptor fd = getContentResolver().openAssetFileDescriptor(uri, "r"); // TODO: is context. needed?
-	            	    Log.i(TAG, fd.toString());
 	            	    FileInputStream fis = fd.createInputStream();
 	            	    byte[] b = new byte[(int) fd.getDeclaredLength()];
 	            	    fis.read(b);
 	            	    String vCard = new String(b);
-	            	    Log.i(TAG, vCard);
-	            	}
-	            	catch (FileNotFoundException e) { e.printStackTrace(); }
-	            	catch (IOException e) { e.printStackTrace(); }
+	            	    Log.d(TAG, vCard);
+            		}
+            		catch (FileNotFoundException e) { e.printStackTrace(); }
+            		catch (IOException e) { e.printStackTrace(); }
             	}
             	else
             	{
