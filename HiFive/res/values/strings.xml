@@ -20,4 +20,6 @@
     <string name="choose_contact">Please choose a contact to highfive.\nWhy not yourself?</string>
     <string name="contact_not_found">"I couldn't find a contact with that phone number. Want to try another number?"</string>
     <string name="contact_chosen_feedback">This is who you\'ll highfive to others!</string>
+    <string name="contact_not_chosen">(None chosen)</string>
+    <string name="contact_label">Contact to be highfived:</string>
 </resources>

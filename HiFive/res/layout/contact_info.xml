@@ -27,12 +27,21 @@
     />
 
     <TextView
-        android:id="@+id/contactName"
+        android:id="@+id/contactLabel"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:layout_marginTop="50dip"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
+        android:gravity="center_horizontal"
+        android:text="@string/contact_label"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/contactName"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_marginTop="30dip"
+        android:gravity="center_horizontal"
+        android:text="@string/contact_not_chosen"
         android:textSize="25sp"
         android:textColor="#00ccff"
         android:ellipsize="end"

@@ -64,6 +64,7 @@ public class Beam extends Activity implements
     public static final int PREF_REQUEST_CODE = 13;
     public static final String PREFERENCE_FILENAME = "ContactsPrefs";
     public static final String LOOKUP_ID = "ContactID";
+    public static final String NAME = "ContactName";
     
 
     @Override
@@ -77,7 +78,7 @@ public class Beam extends Activity implements
     	Log.i(TAG, lookupKey);
     	
     	// Delete all preferences -- for testing only.
-    	// getSharedPreferences(PREFERENCE_FILENAME, 0).edit().clear().commit();
+    	//getSharedPreferences(PREFERENCE_FILENAME, 0).edit().clear().commit();
     	
     	// Bring user to the ContactInfo activity if no preferences saved.
     	if (!settings.contains(LOOKUP_ID))
@@ -244,6 +245,11 @@ public class Beam extends Activity implements
     /** Called when the user clicks the Send button. */
     public void changeContactInfo(View view) {
     	startActivity(new Intent(this, ContactInfo.class));
+    }
+    
+    public void loadVcard()
+    {
+    	// TODO
     }
     
     // TODO: move all toast methods to their own class

@@ -47,6 +47,14 @@ public class ContactInfo extends Activity {
         // Add formatting to number field
         number = (TextView) findViewById(R.id.number);
         number.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+        
+        // Display contact's name if a contact has been set.
+    	SharedPreferences settings = getSharedPreferences(Beam.PREFERENCE_FILENAME, MODE_PRIVATE);
+    	if (settings.contains(Beam.NAME))
+    	{
+        	String name = settings.getString(Beam.NAME, "Anonymous");
+    		((TextView) findViewById(R.id.contactName)).setText(name);
+    	}
     }
     
     /**
@@ -82,7 +90,6 @@ public class ContactInfo extends Activity {
     	if (c != null && c.moveToFirst())
     	{
     		String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)); // DISPLAY_NAME_PRIMARY will use other info if their name is not available
-    		Log.i(TAG, name);
     		String lookupKey = c.getString(c.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
     		c.close();
     		
@@ -104,7 +111,7 @@ public class ContactInfo extends Activity {
     		catch (FileNotFoundException e) { e.printStackTrace(); }
     		catch (IOException e) { e.printStackTrace(); }
     		
-    		setContact(lookupKey);
+    		setContact(lookupKey, name);
     	}
     	else
     	{
@@ -116,7 +123,7 @@ public class ContactInfo extends Activity {
      * Saves a piece of identifying info from the chosen contact,
      * so we can remember who it is for the next use of app.
      */
-    public void setContact(String lookupKey)
+    public void setContact(String lookupKey, String name)
     {
     	// Get the application settings and open the editor.
     	SharedPreferences settings = getSharedPreferences(Beam.PREFERENCE_FILENAME, MODE_PRIVATE);
@@ -124,10 +131,14 @@ public class ContactInfo extends Activity {
  
     	// Save the lookupKey as an application preference.
 		if (!lookupKey.isEmpty()) prefEditor.putString(Beam.LOOKUP_ID, lookupKey);
+		
+    	// Save name as an application preference.
+		if (!name.isEmpty()) prefEditor.putString(Beam.NAME, name);
 
 		// Commit the changes to the preferences.
 		prefEditor.commit();
 		Log.i(TAG, "Saved: " + lookupKey);
+		Log.i(TAG, "Saved: " + name);
     }
     
     @Override
