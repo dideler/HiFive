@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">HiFive</string>
-    <string name="info">Are NFC and Android Beam enabled?\n
-        Turn them on in the system settings\n
-        (use the settings icons above).\n
-        Then place this device against another Android device that supports Android Beam
-        to send your contact info.</string>
+    <string name="info">
+        1. Enable NFC and Android Beam\n
+        (you can use the settings above).\n
+        2. Choose a contact to highfive\n(your choice will be remembered).\n
+        3. Highfive this device with another that supports Android Beam and NFC.</string>
     <string name="nfc_disabled">Uh oh, NFC is disabled!\n
         Enable it via the setting icon above.</string>
     <string name="beam_disabled">Uh oh, Android Beam is disabled!\n
@@ -17,4 +17,7 @@
     <string name="button_contact_info">Set Your Contact Info</string>
     <string name="button_search_contacts">Search Contacts</string>
     <string name="hint_contactinfo">Enter your phone number</string>
+    <string name="choose_contact">Please choose a contact to highfive.\nWhy not yourself?</string>
+    <string name="contact_not_found">"I couldn't find a contact with that phone number. Want to try another number?"</string>
+    <string name="contact_chosen_feedback">This is who you\'ll highfive to others!</string>
 </resources>
