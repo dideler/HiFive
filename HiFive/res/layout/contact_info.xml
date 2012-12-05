@@ -9,20 +9,28 @@
     android:padding="10dp">
     
     <EditText
-        android:layout_height="wrap_content"
         android:id="@+id/number"
+        android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:inputType="phone"
         android:hint="@string/hint_contactinfo"
     />
     
     <Button
-        android:layout_height="wrap_content"
         android:id="@+id/search"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_width="fill_parent"
         android:text="@string/button_search_contacts"
     />
-    
+
+    <TextView
+        android:id="@+id/contactName"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp" />
+    <!-- Might have to change width properties for people with long names. -->
+        
 </LinearLayout>
