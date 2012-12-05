@@ -152,26 +152,11 @@ public class Beam extends Activity implements
      */
     @Override
     public void onNdefPushComplete(NfcEvent arg0) {
-    	toast(R.string.beamed);
+    	//toast(R.string.beamed);
 		Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE) ;
 		vibe.vibrate(500);
-    	// TODO: Is handler (and NfcEvent param) necessary for us? 
-        // A handler is needed to send messages to the activity when this
-        // callback occurs, because it happens from a binder thread
-        mHandler.obtainMessage(MESSAGE_SENT).sendToTarget();
     }
 
-    /** This handler receives a message from onNdefPushComplete */
-    private final Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-            case MESSAGE_SENT:
-                Toast.makeText(getApplicationContext(), "Message sent!", Toast.LENGTH_LONG).show();
-                break;
-            }
-        }
-    };
 
     @Override
     public void onResume()
@@ -189,7 +174,7 @@ public class Beam extends Activity implements
         }
         else // good to go!
         {
-            if (VCARD.length() <= 0)	// ensure contact has been set
+            if (VCARD.length() <= 0)  // Ensure contact has been set.
             {
             	mInfoText.setText(R.string.forgot_set_contact);
             	//toast(R.string.choose_contact);
@@ -199,6 +184,7 @@ public class Beam extends Activity implements
             {
             	// Register callback to set NDEF message
                 mNfcAdapter.setNdefPushMessageCallback(this, this);
+                
                 // Register callback to listen for message-sent success
                 mNfcAdapter.setOnNdefPushCompleteCallback(this, this);
             }
