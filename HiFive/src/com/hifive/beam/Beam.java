@@ -69,7 +69,6 @@ public class Beam extends Activity implements
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mNfcAdapter == null)
         {
-            mInfoText = (TextView) findViewById(R.id.textView);
             mInfoText.setText("NFC is not available on this device.");
         }
         else if (!mNfcAdapter.isEnabled()) // TODO: make it a notification
