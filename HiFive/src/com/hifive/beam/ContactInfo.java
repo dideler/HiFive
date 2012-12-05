@@ -10,6 +10,7 @@ import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.net.Uri;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.PhoneLookup;
@@ -77,8 +78,12 @@ public class ContactInfo extends Activity {
             	if (c != null && c.moveToFirst())
             	{
             		String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)); // DISPLAY_NAME_PRIMARY will use other info if their name is not available
+            		Log.i(TAG, name);
             		String lookupKey = c.getString(c.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
             		c.close();
+            		
+            		// Display contact's name (or other identifying info if no name).
+            		((TextView) findViewById(R.id.contactName)).setText(name);
             		
             		Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey);     
             		
