@@ -13,8 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:inputType="phone"
-        android:hint="@string/hint_contactinfo"
-    />
+        android:hint="@string/hint_contactinfo" />
     
     <Button
         android:id="@+id/search"
@@ -23,8 +22,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:text="@string/button_search_contacts"
-        android:onClick="searchContact"
-    />
+        android:onClick="searchContact" />
 
     <TextView
         android:id="@+id/contactLabel"
@@ -49,5 +47,15 @@
         android:scrollHorizontally="true"
         android:singleLine="true" />
     <!-- Might have to change width properties for people with long names. -->
+    
+        <Button
+        android:id="@+id/clear"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_marginTop="55dip"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="@string/clear_contact"
+        android:onClick="clearContact" />
         
 </LinearLayout>

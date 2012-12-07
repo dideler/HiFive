@@ -148,6 +148,20 @@ public class ContactInfo extends Activity {
 		Log.i(TAG, "Saved: " + name);
     }
     
+    // Removes the contact from the SharedPreferences.
+    public void clearContact(View view)
+    {
+    	// Delete all shared preferences.
+    	getSharedPreferences(Beam.PREFERENCE_FILENAME, 0).edit().clear().commit();
+    	
+    	// Clear vCard data.
+    	Beam.VCARD = "";
+    	
+    	// Reset number field and name field.
+    	((TextView) findViewById(R.id.number)).setText("");
+    	((TextView) findViewById(R.id.contactName)).setText(R.string.contact_not_chosen);
+    }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

@@ -71,9 +71,6 @@ public class Beam extends Activity implements
         //{
         //	toast(R.string.beam_disabled);
         //}
-    	    	
-    	// Delete all preferences -- for testing only!
-    	//getSharedPreferences(PREFERENCE_FILENAME, 0).edit().clear().commit();
         
     	// Load lookupKey from saved preferences.
     	String lookupKey = settings.getString(LOOKUP_ID, "No ID found!");
@@ -147,10 +144,10 @@ public class Beam extends Activity implements
             switch (msg.what)  // User-defined message code.
             {
             	case MESSAGE_SENT:
-	            	toast(R.string.beamed);
+            		toast(R.string.beamed);
 	        		Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE) ;
 	        		vibe.vibrate(500);
-	                break;
+	        		break;
             }
         }
     };
