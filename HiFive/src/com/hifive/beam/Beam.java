@@ -146,7 +146,7 @@ public class Beam extends Activity implements
             	case MESSAGE_SENT:
             		toast(R.string.beamed);
 	        		Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE) ;
-	        		vibe.vibrate(500);
+	        		if (vibe.hasVibrator()) vibe.vibrate(500);
 	        		break;
             }
         }
