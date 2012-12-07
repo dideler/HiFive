@@ -26,6 +26,8 @@ import android.nfc.NfcAdapter.OnNdefPushCompleteCallback;
 import android.nfc.NfcEvent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Vibrator;
 import android.provider.ContactsContract;
 import android.provider.Settings;
@@ -118,7 +120,7 @@ public class Beam extends Activity implements
     	{
     		byte[] uriField = VCARD.getBytes(Charset.forName("US-ASCII"));
     		byte[] payload = new byte[uriField.length + 1];  // Add 1 for the URI Prefix.
-    		System.arraycopy(uriField, 0, payload, 1, uriField.length);  //appends URI to payload
+    		System.arraycopy(uriField, 0, payload, 1, uriField.length);  // Append URI to payload.
     		NdefRecord nfcRecord = new NdefRecord(
     				NdefRecord.TNF_MIME_MEDIA, "text/vcard".getBytes(), new byte[0], payload);
     		return nfcRecord;
@@ -126,15 +128,32 @@ public class Beam extends Activity implements
     }
 
     /**
-     * Implementation for the OnNdefPushCompleteCallback interface
+     * Implementation for the OnNdefPushCompleteCallback interface.
+     * A handler is needed to send messages to the activity when this
+     * callback occurs, because it happens from a binder thread.
      */
     @Override
-    public void onNdefPushComplete(NfcEvent arg0) {
-    	//toast(R.string.beamed);
-		Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE) ;
-		vibe.vibrate(500);
+    public void onNdefPushComplete(NfcEvent arg0)
+    {
+    	mHandler.obtainMessage(MESSAGE_SENT).sendToTarget();
     }
 
+    /** This handler receives a message from onNdefPushComplete */
+    private final Handler mHandler = new Handler()
+    {
+        @Override
+        public void handleMessage(Message msg)
+        {
+            switch (msg.what)  // User-defined message code.
+            {
+            	case MESSAGE_SENT:
+	            	toast(R.string.beamed);
+	        		Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE) ;
+	        		vibe.vibrate(500);
+	                break;
+            }
+        }
+    };
 
     @Override
     public void onResume()
@@ -152,7 +171,7 @@ public class Beam extends Activity implements
         }
         else // good to go!
         {
-            if (VCARD.length() <= 0)  // Ensure contact has been set.
+            if (VCARD.isEmpty())  // Ensure contact has been set.
             {
             	statusbar.setText(R.string.forgot_set_contact);
             	//toast(R.string.choose_contact);
