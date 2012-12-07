@@ -175,18 +175,6 @@ public class Beam extends Activity implements
         setIntent(intent);
     }
 
-    /**
-     * Creates a custom MIME type encapsulated in an NDEF record
-     *
-     * @param mimeType
-     */
-    public NdefRecord createMimeRecord(String mimeType, byte[] payload) {
-        byte[] mimeBytes = mimeType.getBytes(Charset.forName("US-ASCII"));
-        NdefRecord mimeRecord = new NdefRecord(
-                NdefRecord.TNF_MIME_MEDIA, mimeBytes, new byte[0], payload);
-        return mimeRecord;
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // If NFC is not available, we won't be needing this menu
